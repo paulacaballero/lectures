@@ -75,7 +75,7 @@ def count (m,**kwargs):
     if(m == 0):  
         perm = np.array(list(itertools.permutations(range(n))))
         num_perm = len(perm)
-		#recursive
+	#recursive
     elif(m == 1):
         e = Permutacion()				
         permutacion = e.permutations(n)	
@@ -127,16 +127,17 @@ def histograma_interc(intercambios,num_perm,n):
     plt.ylabel('Probaility')			
     plt.show()
     
-	#Imprimir datos
     vals,counts = np.unique(intercambios,return_counts=True)
     print("\nNumero promedio de intercambios: "+str(np.average(intercambios)))
     print("\nMinimo numero de comparaciones: "+str(min_num_pasos))
     print("\nMaximo numero de comparaciones: "+str(max_num_pasos))
         
-#Programa principal: para usar itertools poner 0 en counter, para usar recursion poner 1 en counter
+
 nPermRequired = 6 
 pasos,compare,interc,permutacion,num_perm = counter(0,n=nPermRequired)
 histogramaPasos(pasos,numeroPermutaciones,nPermRequired)
 histogramaComparaciones(compare,num_perm,nPermRequired)
 histogramaIntercambios(interc,num_perm,nPermRequired)
 ```
+
+![GitHub Logo](/Escritorio/Captura.png)
