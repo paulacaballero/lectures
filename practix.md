@@ -95,7 +95,7 @@ def count (m,**kwargs):
 def histograma_pasos(pasos,num_perm,n):
     min_num_pasos, max_num_pasos = min(pasos), max(pasos)		
     plt.hist(pasos, bins=np.arange(min_num_pasos,max_num_pasos + 1, 1), normed=1)	
-    plt.title("Probability Density Steps - n = "+str(n))
+    plt.title("Pasos n = "+str(n))
     plt.xlabel('Steps')
     plt.ylabel('Probaility'))				
     plt.show()																		    
@@ -108,21 +108,21 @@ def histograma_pasos(pasos,num_perm,n):
 def histograma_compare(comparaciones,num_perm,n):
     min_num_pasos, max_num_pasos = min(comparaciones), max(comparaciones)		
     plt.hist(comparaciones, bins=np.arange(min_num_pasos, max_num_pasos + 1, 1), normed=1)	
-    plt.title("Probability Density Comparisons - n = "+str(n))
+    plt.titleComparaciones n = "+str(n))
     plt.xlabel('n-comparisons')
     plt.ylabel('Probaility')
     plt.show()
 
     #Imprimir datos
     vals,counts = np.unique(compare,return_counts=True)
-    print("\nNumero promedio de compare: "+str(np.average(compare)))
-    print("\nMinimo numero de compare: "+str(min_num_pasos))
-    print("\nMaximo numero de compare: "+str(max_num_pasos))
+    print("\nNumero promedio de comparaciones: "+str(np.average(compare)))
+    print("\nMinimo numero de comparaciones: "+str(min_num_pasos))
+    print("\nMaximo numero de comparaciones: "+str(max_num_pasos))
         
 def histograma_interc(intercambios,num_perm,n):
     min_num_pasos,max_num_pasos = min(interc), max(interc)	
     plt.hist(intercambios, bins=np.arange(min_num_pasos,max_num_pasoss + 1, 1), normed=1)	
-    plt.title("Probability Density Swaps - n = "+str(n))
+    plt.title("Intercambios - n = "+str(n))
     plt.xlabel('n-swaps')
     plt.ylabel('Probaility')			
     plt.show()
