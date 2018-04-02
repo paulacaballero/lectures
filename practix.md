@@ -140,4 +140,3 @@ histogramaComparaciones(compare,num_perm,nPermRequired)
 histogramaIntercambios(interc,num_perm,nPermRequired)
 ```
 
-![GitHub Logo](/Escritorio/Captura.png)
