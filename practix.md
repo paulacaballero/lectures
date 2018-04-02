@@ -1,4 +1,6 @@
-# INSERTION
+# Punto 6. Insertion Sort
+Codigo python:
+
 ``` python
 
 import numpy as np
@@ -6,128 +8,135 @@ import time
 import itertools
 import matplotlib.pyplot as plt
 
-def insertionSortCounter(arreglo,largoArreglo):
-	#inicializacion de contadores
-    numeroPasos = 0
-    numeroComparaciones = 0
-    numeroIntercambios = 0
-	
-	#Se crea arreglo igual de largo al arreglo parametro y de tipo entero
-    array=np.zeros(largoArreglo,dtype=int)
+def insertion_sort (arr, lenght):
+	#variables counter
+    num_pasos = 0
+    num_compare = 0
+    num_interc = 0
+    array = np.zeros (lenght, dtype=int)
     i = 1
-    while(i<largoArreglo):
-        aux = arreglo[i]
-        j=i-1
-        while(True):
-            numeroComparaciones+=1		#La  comparacion de haber entrado al while
-            array[i]+=1
-            if(j<0):
-				break
-            if(aux>=arreglo[j]):
-				break
-            numeroIntercambios+=1		#El intercambio del anterior con el siguiente
-            arreglo[j+1]=arreglo[j]
-            j-=1;numeroPasos+=3
-        arreglo[j+1]=aux;numeroPasos+=1;
-        i+=1;numeroPasos+=4
-    numeroPasos+=1
-    return arreglo,numeroPasos,numeroComparaciones,numeroIntercambios,array
+    	#insert sort code + counters
+    while (i < lenght):
+        temp = arr[i]
+        j = i-1
+        while (True):
+            num_compare += 1 #compares
+            array[i] += 1
+	    
+            if(j < 0):
+		break
+            if(aux >= arr[j]):
+		break
+            num_interc += 1   #intercambia
+            arr [j+1] = arr[j]
+            j -= 1;
+	    num_pasos += 3
+	    
+        arr[j+1] = temp;
+	num_pasos += 1;
+        i += 1;
+	num_pasos += 4
+    num_pasos += 1
+    
+    return arr, num_pasos,num_compare,num_interc, array
 
-class Permutacion:
+class Permutation:
     def __init__(self):
-        self.arreglo = [] #Contiene las permutaciones
-        self.used = [0]*100 #Máximo 100 permutaciones 
-        self.posicionActual=0
-        self.permutacion=[]
+        self.arr = [] 
+        self.used = [0]*100 # max 100 perm.
+        self.pos = 0
+        self.perm = []
 		
-    def permutacionesAuxiliares(self,n):
-        if(self.posicionActual==n):
-            self.arreglo.append(list(self.permutacion))
+    def perm_aux(self,n):
+        if(self.pos == n):
+            self.arr.append (list(self.perm))
             return
-        self.posicionActual+=1        
+        self.pos += 1        
         for i in range(n):
-            if(self.used[i]==1): 
-				continue
-            self.used[i]=1;self.permutacion.append(i);
-            self.permutacionesAuxiliares(n)
-            self.used[i]=0;self.permutacion.pop()
-        self.posicionActual-=1
+            if(self.used[i] == 1): 
+		continue
+            self.used[i] = 1;
+	    self.perm.append(i);
+            self.perm_aux(n)
+            self.used[i] = 0;
+	    self.perm.pop()
+        self.pos -= 1
     
     def permutations (self,n):
         self.__init__()
-        self.permutacionesAuxiliares(n)
-        return self.arreglo
+        self.perm_aux(n)
+        return self.arr
     
-def counter(metodo,**kwargs):	#kwargs permite traer argumentos sin nombre definido aun
-    n = kwargs.get('n',None)	#Numero de permutaciones, se revisa el argumento
-    permutacion = []
-    numeroPermutaciones = 0
-    if(metodo==0):  #Metodo de itertools
-        permutacion = np.array(list(itertools.permutations(range(n)))) #Creacion de permutacion por itertools
-        numeroPermutaciones = len(permutacion)
-    elif(metodo==1): #Método funcion recursiva
-        e = Permutacion()				#Instanciacion de objeto Permutacion
-        permutacion = e.permutations(n)	#Inicializacion de objeto Permutacion y creacion de permutaciones
+def count (m,**kwargs):
+    n = kwargs.get('n',None)
+    perm = []
+    num_perm = 0
+    	#itertools
+    if(m == 0):  
+        perm = np.array(list(itertools.permutations(range(n))))
+        num_perm = len(perm)
+		#recursive
+    elif(m == 1):
+        e = Permutacion()				
+        permutacion = e.permutations(n)	
         numeroPermutaciones = len(permutacion)
 	
-	#np.empty crea un vector del tamano especificado pero sin inicializar, entonces tiene basura en sus indices
-    pasos = np.empty(numeroPermutaciones)			#Creacion arreglo para numero de pasos
-    comparaciones = np.empty(numeroPermutaciones)	#Creacion arreglo para numero de comparaciones
-    intercambios = np.empty(numeroPermutaciones)	#Creacion arreglo para numero de intercambios
-    for i in range (numeroPermutaciones):
-        arregloAuxOrdenar = np.copy(permutacion[i])
-        arreglo,numeroPasos,numeroComparaciones,numeroIntercambios,array = insertionSortCounter(arregloAuxOrdenar,n)
-        pasos[i]=numeroPasos
-        comparaciones[i]=numeroComparaciones
-        intercambios[i]=numeroIntercambios
-    return pasos,comparaciones,intercambios,permutacion,numeroPermutaciones
+    pasos = np.empty(num_perm)			
+    compare = np.empty(num_perm)	
+    interc = np.empty(num_perm)	
+    for i in range (num_perm):
+        arr_aux = np.copy(perm[i])
+        arr,num_pasos, numeroComparaciones, numeroIntercambios, array = insertionSortCounter(arr_aux,n)
+        pasos[i] = num_pasos
+        compares [i] = num_compare
+        interc[i] = num_interc
+    return pasos, compare, interc, perm, num_perm
 
-def histogramaPasos(pasos,numeroPermutaciones,n):
-    min_numeroPasos,max_numeroPasos=min(pasos), max(pasos)								#Obtener los extremos del histograma
-    plt.hist(pasos, bins=np.arange(min_numeroPasos,max_numeroPasos + 1, 1), normed=1)	#Crear histograma
-    plt.title("Histograma numero de pasos con n = "+str(n))									#Añadir titulo al histograma
-    plt.xlabel('Pasos')														#Añadir label a eje x
-    plt.ylabel('Probabilidad')															#Añadir label a eje y
-    plt.show()																			
-    
+def histograma_pasos(pasos,num_perm,n):
+    min_num_pasos, max_num_pasos = min(pasos), max(pasos)		
+    plt.hist(pasos, bins=np.arange(min_num_pasos,max_num_pasos + 1, 1), normed=1)	
+    plt.title("Probability Density Steps - n = "+str(n))
+    plt.xlabel('Steps')
+    plt.ylabel('Probaility'))				
+    plt.show()																		    
     #Imprimir datos
     vals,counts = np.unique(pasos,return_counts=True)
     print("\nNumero promedio de pasos: "+str(np.average(pasos)))
-    print("\nMinimo numero de pasos: "+str(min_numeroPasos))
-    print("\nMaximo numero de pasos: "+str(max_numeroPasos))
+    print("\nMinimo numero de pasos: "+str(min_num_pasos))
+    print("\nMaximo numero de pasos: "+str(max_num_pasos))
     
-def histogramaComparaciones(comparaciones,numeroPermutaciones,n):
-    min_numeroPasos,max_numeroPasos=min(comparaciones), max(comparaciones)						#Obtener los extremos del histograma
-    plt.hist(comparaciones, bins=np.arange(min_numeroPasos,max_numeroPasos + 1, 1), normed=1)	#Crear histograma
-    plt.title("Histograma numero de comparaciones con n = "+str(n))									#Añadir titulo al histograma
-    plt.xlabel('Comparaciones')																	#Añadir label a eje x
-    plt.ylabel('Probabilidad')																	#Añadir label a eje y
+def histograma_compare(comparaciones,num_perm,n):
+    min_num_pasos, max_num_pasos = min(comparaciones), max(comparaciones)		
+    plt.hist(comparaciones, bins=np.arange(min_num_pasos, max_num_pasos + 1, 1), normed=1)	
+    plt.title("Probability Density Comparisons - n = "+str(n))
+    plt.xlabel('n-comparisons')
+    plt.ylabel('Probaility')
     plt.show()
 
     #Imprimir datos
-    vals,counts = np.unique(comparaciones,return_counts=True)
-    print("\nNumero promedio de comparaciones: "+str(np.average(comparaciones)))
-    print("\nMinimo numero de comparaciones: "+str(min_numeroPasos))
-    print("\nMaximo numero de comparaciones: "+str(max_numeroPasos))
+    vals,counts = np.unique(compare,return_counts=True)
+    print("\nNumero promedio de compare: "+str(np.average(compare)))
+    print("\nMinimo numero de compare: "+str(min_num_pasos))
+    print("\nMaximo numero de compare: "+str(max_num_pasos))
         
-def histogramaIntercambios(intercambios,numeroPermutaciones,n):
-    min_numeroPasos,max_numeroPasos=min(intercambios), max(intercambios)						#Obtener los extremos del histograma
-    plt.hist(intercambios, bins=np.arange(min_numeroPasos,max_numeroPasos + 1, 1), normed=1)	#Crear histograma
-    plt.title("Histograma numero de intercambios con n = "+str(n))								#Añadir titulo al histograma
-    plt.xlabel('Intercambios')																	#Añadir label a eje x
-    plt.ylabel('Probabilidad')																	#Añadir label a eje y
+def histograma_interc(intercambios,num_perm,n):
+    min_num_pasos,max_num_pasos = min(interc), max(interc)	
+    plt.hist(intercambios, bins=np.arange(min_num_pasos,max_num_pasoss + 1, 1), normed=1)	
+    plt.title("Probability Density Swaps - n = "+str(n))
+    plt.xlabel('n-swaps')
+    plt.ylabel('Probaility')			
     plt.show()
     
 	#Imprimir datos
     vals,counts = np.unique(intercambios,return_counts=True)
     print("\nNumero promedio de intercambios: "+str(np.average(intercambios)))
-    print("\nMinimo numero de comparaciones: "+str(min_numeroPasos))
-    print("\nMaximo numero de comparaciones: "+str(max_numeroPasos))
+    print("\nMinimo numero de comparaciones: "+str(min_num_pasos))
+    print("\nMaximo numero de comparaciones: "+str(max_num_pasos))
         
 #Programa principal: para usar itertools poner 0 en counter, para usar recursion poner 1 en counter
 nPermRequired = 6 
-pasos,comparaciones,intercambios,permutacion,numeroPermutaciones = counter(0,n=nPermRequired)
+pasos,compare,interc,permutacion,num_perm = counter(0,n=nPermRequired)
 histogramaPasos(pasos,numeroPermutaciones,nPermRequired)
-histogramaComparaciones(comparaciones,numeroPermutaciones,nPermRequired)
-histogramaIntercambios(intercambios,numeroPermutaciones,nPermRequired)
+histogramaComparaciones(compare,num_perm,nPermRequired)
+histogramaIntercambios(interc,num_perm,nPermRequired)
 ```
